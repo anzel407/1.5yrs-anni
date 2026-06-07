@@ -228,7 +228,7 @@
         cursor: pointer;
         perspective: 1000px;
         animation: jiggle 5s infinite ease-in-out;
-        transform: translateY(150px) translateX(70px); /* Moved down and further to the right */
+        transform: translateY(150px) translateX(70px); 
     }
 
     .envelope-back {
@@ -270,7 +270,8 @@
 
     .letter {
         position: absolute; bottom: 5px; left: 15px; right: 15px; height: 210px; 
-        background-color: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        background-color: #fff9c4; /* Custom Soft Light Yellow */
+        border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         z-index: 3; display: flex; align-items: center; justify-content: center;
         text-align: center; font-family: 'Georgia', serif; font-size: 26px; font-weight: bold;
         color: #b22222; transition: transform 0.5s ease-in-out; 
@@ -440,8 +441,7 @@
         display: flex; align-items: center; gap: 15px; transition: background 0.2s;
         font-size: 16px; color: #333; font-weight: bold;
     }
-    .track-item:hover { background-color: #f9f9f9
-    }
+    .track-item:hover { background-color: #f9f9f9; }
     .track-item.active { background-color: #f4f5d7; color: #8da631; border-left: 5px solid #a4c639; }
     .track-number { font-size: 14px; color: #999; font-weight: normal; }
 
@@ -550,7 +550,7 @@
 
         <div class="playlist-panel">
             <div class="playlist-header">
-                <h2>Our Playlist</h2>
+                <h2>Thế mà lại hay đấy</h2>
                 <p id="songCount">Loading tracks from GitHub...</p>
             </div>
             <ul class="track-list" id="trackList">
@@ -821,7 +821,7 @@
     const gradAngleSlider = document.getElementById('gradAngleSlider');
     const angleValue = document.getElementById('angleValue');
     
-    let activeCustomTab = 'solid'; // Tracks Canva colorboard tab choice
+    let activeCustomTab = 'solid'; 
 
     // Open/Close Dropdown Panel
     themeTrigger.addEventListener('click', (e) => {
