@@ -58,7 +58,7 @@
         cursor: pointer;
         perspective: 1000px;
         animation: jiggle 5s infinite ease-in-out;
-        transform: translateY(120px) translateX(40px); /* Moved down and more to the right */
+        transform: translateY(150px) translateX(70px); /* Moved down and further to the right */
     }
 
     .envelope-back {
@@ -88,6 +88,12 @@
         background: transparent;
     }
 
+    /* Disable the invisible hitbox overlay once a strip has slid out so it doesn't block image clicks */
+    .envelope-wrapper.is-open .film-strip.active::before,
+    .envelope-wrapper.state-2 .film-strip::before {
+        pointer-events: none;
+    }
+
     .film-frame { width: 100%; aspect-ratio: 3 / 4; background-color: #333; overflow: hidden; border-radius: 1px; color: transparent; }
     .film-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
     .film-frame img:hover { transform: scale(1.15); }
@@ -115,12 +121,12 @@
     }
 
     @keyframes jiggle {
-        0%, 85% { transform: translateY(120px) translateX(40px) rotate(0); }
-        88% { transform: translateY(120px) translateX(40px) rotate(3deg) scale(1.02); }
-        91% { transform: translateY(120px) translateX(40px) rotate(-3deg) scale(1.02); }
-        94% { transform: translateY(120px) translateX(40px) rotate(3deg) scale(1.02); }
-        97% { transform: translateY(120px) translateX(40px) rotate(-3deg) scale(1.02); }
-        100% { transform: translateY(120px) translateX(40px) rotate(0); }
+        0%, 85% { transform: translateY(150px) translateX(70px) rotate(0); }
+        88% { transform: translateY(150px) translateX(70px) rotate(3deg) scale(1.02); }
+        91% { transform: translateY(150px) translateX(70px) rotate(-3deg) scale(1.02); }
+        94% { transform: translateY(150px) translateX(70px) rotate(3deg) scale(1.02); }
+        97% { transform: translateY(150px) translateX(70px) rotate(-3deg) scale(1.02); }
+        100% { transform: translateY(150px) translateX(70px) rotate(0); }
     }
 
     /* --- Open Animations --- */
@@ -649,10 +655,14 @@
         img.addEventListener('click', (e) => {
             const strip = img.closest('.film-strip');
             
-            // If in State 1 and the strip isn't pulled out yet, don't open lightbox. 
-            // Instead, let the click bubble up to the envelope listener to pull the strip out.
+            // If the strip hasn't slid out yet, determine behavior
             if (envelopeState === 1 && !strip.classList.contains('active')) {
+                // Let the click bubble up to the envelope listener so it slides out the strip
                 return; 
+            }
+            
+            if (envelopeState === 0) {
+                return;
             }
 
             // Stop click from closing the envelope or resetting state
