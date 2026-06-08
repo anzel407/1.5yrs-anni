@@ -201,24 +201,24 @@
     }
 
     /* =========================================
-       1. TOP SECTION (Logo & Tagline)
+       1. TOP SECTION (Logo & Tagline - MODIFIED)
        ========================================= */
     .top-section {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px; /* Brought closer together */
+        gap: -25px; /* Negative gap pulls them tighter together to ignore transparency padding */
         margin-bottom: 20px;
     }
 
     .anni-logo {
-        width: 250px; /* Massively scaled up */
-        height: 250px;
+        width: 360px; /* Scaled up from 250px */
+        height: 360px; /* Scaled up from 250px */
         object-fit: contain;
     }
 
     .tagline-img {
-        height: 320px; /* Scaled proportionally to match the massive logo */
+        height: 440px; /* Scaled up from 320px */
         object-fit: contain;
     }
 
@@ -255,7 +255,7 @@
     .film-strips-container { position: absolute; bottom: 20px; left: 50%; z-index: 2; }
 
     .film-strip {
-        position: absolute; bottom: 0; width: 38px; background-color: #111; 
+        position: absolute; bottom: var(--start-y); width: 38px; background-color: #111; 
         padding: 4px; border-radius: 2px; display: flex; flex-direction: column; gap: 4px;
         transform-origin: bottom center; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         opacity: 0; transform: translate(-50%, 0) rotate(0deg) translateY(0);
@@ -307,7 +307,6 @@
         transition: transform 0.4s 0.6s ease-in-out, z-index 0s 0.6s; 
     }
 
-    /* Cleaned up jiggle animation to revolve purely around its new centered container */
     @keyframes jiggle {
         0%, 85% { transform: rotate(0); }
         88% { transform: rotate(3deg) scale(1.02); }
@@ -328,7 +327,6 @@
         transition: transform 0.6s 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s 0.5s;
     }
 
-    /* REPLACED HOVER WITH CLICK-BASED STATE CLASSES */
     .envelope-wrapper.is-open .film-strip.active,
     .envelope-wrapper.state-2 .film-strip {
         transform: translate(calc(-50% + var(--open-x)), var(--open-y)) rotate(var(--open-rot)) translateY(-185px); 
@@ -371,7 +369,6 @@
     .knob { width: 28px; height: 28px; background-color: #fff; border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: relative; }
     .knob::after { content: ''; position: absolute; top: 4px; left: 13px; width: 2px; height: 8px; background-color: #a4c639; }
     
-    /* Central Alignment Stack for Playback Controls + Progress Bar */
     .center-controls {
         display: flex;
         flex-direction: column;
@@ -384,12 +381,8 @@
     .btn { background: none; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.1s; padding: 0; }
     .btn:active { transform: scale(0.92); }
     
-    /* Shuffle Button Active State Style */
-    .btn#shuffleBtn.active svg {
-        fill: #a4c639;
-    }
+    .btn#shuffleBtn.active svg { fill: #a4c639; }
 
-    /* Progress Bar Layout Styles */
     .progress-container {
         display: flex;
         align-items: center;
@@ -581,37 +574,37 @@
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-back"></div>
         <div class="film-strips-container">
-            <div class="film-strip" style="--open-x: -80px; --open-y: -90px; --open-rot: -18deg;">
+            <div class="film-strip" style="--open-x: -80px; --open-y: -90px; --open-rot: -18deg; --start-y: 10px;">
                 <div class="film-frame"><img src="img1.jpg" alt="Photo 1"></div>
                 <div class="film-frame"><img src="img2.jpg" alt="Photo 2"></div>
                 <div class="film-frame"><img src="img3.jpg" alt="Photo 3"></div>
                 <div class="film-frame"><img src="img4.jpg" alt="Photo 4"></div>
             </div>
-            <div class="film-strip" style="--open-x: -48px; --open-y: -110px; --open-rot: -11deg;">
+            <div class="film-strip" style="--open-x: -48px; --open-y: -110px; --open-rot: -11deg; --start-y: 5px;">
                 <div class="film-frame"><img src="img5.jpg" alt="Photo 5"></div>
                 <div class="film-frame"><img src="img6.jpg" alt="Photo 6"></div>
                 <div class="film-frame"><img src="img7.jpg" alt="Photo 7"></div>
                 <div class="film-frame"><img src="img8.jpg" alt="Photo 8"></div>
             </div>
-            <div class="film-strip" style="--open-x: -16px; --open-y: -120px; --open-rot: -4deg;">
+            <div class="film-strip" style="--open-x: -16px; --open-y: -120px; --open-rot: -4deg; --start-y: 0px;">
                 <div class="film-frame"><img src="img9.jpg" alt="Photo 9"></div>
                 <div class="film-frame"><img src="img10.jpg" alt="Photo 10"></div>
                 <div class="film-frame"><img src="img11.jpg" alt="Photo 11"></div>
                 <div class="film-frame"><img src="img12.jpg" alt="Photo 12"></div>
             </div>
-            <div class="film-strip" style="--open-x: 16px; --open-y: -120px; --open-rot: 4deg;">
+            <div class="film-strip" style="--open-x: 16px; --open-y: -120px; --open-rot: 4deg; --start-y: 0px;">
                 <div class="film-frame"><img src="img13.jpg" alt="Photo 13"></div>
                 <div class="film-frame"><img src="img14.jpg" alt="Photo 14"></div>
                 <div class="film-frame"><img src="img15.jpg" alt="Photo 15"></div>
                 <div class="film-frame"><img src="img16.jpg" alt="Photo 16"></div>
             </div>
-            <div class="film-strip" style="--open-x: 48px; --open-y: -110px; --open-rot: 11deg;">
+            <div class="film-strip" style="--open-x: 48px; --open-y: -110px; --open-rot: 11deg; --start-y: 5px;">
                 <div class="film-frame"><img src="img17.jpg" alt="Photo 17"></div>
                 <div class="film-frame"><img src="img18.jpg" alt="Photo 18"></div>
                 <div class="film-frame"><img src="img19.jpg" alt="Photo 19"></div>
                 <div class="film-frame"><img src="img20.jpg" alt="Photo 20"></div>
             </div>
-            <div class="film-strip" style="--open-x: 80px; --open-y: -90px; --open-rot: 18deg;">
+            <div class="film-strip" style="--open-x: 80px; --open-y: -90px; --open-rot: 18deg; --start-y: 10px;">
                 <div class="film-frame"><img src="img21.jpg" alt="Photo 21"></div>
                 <div class="film-frame"><img src="img22.jpg" alt="Photo 22"></div>
                 <div class="film-frame"><img src="img23.jpg" alt="Photo 23"></div>
