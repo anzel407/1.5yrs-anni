@@ -204,17 +204,30 @@
     .middle-container {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start; /* Changed to align everything perfectly to the left edge */
         justify-content: flex-end;
         height: 650px; /* Matches turntable height perfectly */
         flex-shrink: 0;
+    }
+
+    /* Container for Logo and Tagline side-by-side */
+    .logo-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
     }
 
     /* Logo image styling */
     .anni-logo {
         width: 150px;
         height: 150px;
-        margin-bottom: 20px;
+        object-fit: contain;
+    }
+
+    /* Tagline image styling */
+    .tagline-img {
+        height: 120px; /* Configured height to complement the primary logo dimensions */
         object-fit: contain;
     }
 
@@ -270,7 +283,7 @@
 
     .letter {
         position: absolute; bottom: 5px; left: 15px; right: 15px; height: 210px; 
-        background-color: #fff9c4; /* Custom Soft Light Yellow */
+        background-color: #fff9c4; 
         border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         z-index: 3; display: flex; align-items: center; justify-content: center;
         text-align: center; font-family: 'Georgia', serif; font-size: 26px; font-weight: bold;
@@ -546,7 +559,10 @@
     </div>
 
     <div class="middle-container">
-        <img src="logo1.png" alt="Anniversary Logo" class="anni-logo">
+        <div class="logo-row">
+            <img src="logo1.png" alt="Anniversary Logo" class="anni-logo">
+            <img src="tagline1.png" alt="Anniversary Tagline" class="tagline-img">
+        </div>
 
         <div class="playlist-panel">
             <div class="playlist-header">
