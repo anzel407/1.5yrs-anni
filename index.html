@@ -201,24 +201,24 @@
     }
 
     /* =========================================
-       1. TOP SECTION (Logo & Tagline - MODIFIED)
+       1. TOP SECTION (Logo & Tagline)
        ========================================= */
     .top-section {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: -25px; /* Negative gap pulls them tighter together to ignore transparency padding */
+        gap: -70px; /* Closer together, allowing parent boundary boxes to overlap gracefully */
         margin-bottom: 20px;
     }
 
     .anni-logo {
-        width: 360px; /* Scaled up from 250px */
-        height: 360px; /* Scaled up from 250px */
+        width: 360px;
+        height: 360px;
         object-fit: contain;
     }
 
     .tagline-img {
-        height: 440px; /* Scaled up from 320px */
+        height: 520px; /* Scaled a bit larger from 440px */
         object-fit: contain;
     }
 
