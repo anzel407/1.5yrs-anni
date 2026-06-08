@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anniversary Gift</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <style>
     /* Reset and Layout */
     body {
@@ -29,6 +32,7 @@
         width: 100%;
         max-width: 1400px;
         padding: 60px 40px;
+        box-sizing: border-box;
     }
 
     /* =========================================
@@ -218,7 +222,7 @@
     }
 
     .tagline-img {
-        height: 520px; /* Scaled a bit larger from 440px */
+        height: 520px;
         object-fit: contain;
     }
 
@@ -235,6 +239,13 @@
     /* =========================================
        3. ENVELOPE SECTION (Bottom)
        ========================================= */
+    .envelope-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
     .envelope-wrapper {
         position: relative;
         width: 350px;
@@ -288,7 +299,9 @@
         background-color: #fff9c4; 
         border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         z-index: 3; display: flex; align-items: center; justify-content: center;
-        text-align: center; font-family: 'Georgia', serif; font-size: 24px; font-weight: bold;
+        text-align: center; 
+        font-family: 'Lora', 'Georgia', serif; /* MODIFIED: Set font to Lora */
+        font-size: 24px; font-weight: bold;
         line-height: 1.4;
         color: #b22222; transition: transform 0.5s ease-in-out; 
         box-sizing: border-box; padding-bottom: 10px;
@@ -461,6 +474,64 @@
     .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     .lightbox.active { opacity: 1; pointer-events: auto; }
     .lightbox img { max-width: 90%; max-height: 90vh; border: 8px solid white; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+    /* =========================================
+       📱 MOBILE RESPONSIVENESS & COMPATIBILITY
+       ========================================= */
+    @media (max-width: 900px) {
+        .main-layout {
+            padding: 30px 15px;
+            gap: 40px;
+        }
+        .top-section {
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .anni-logo {
+            width: 280px;
+            height: 280px;
+        }
+        .tagline-img {
+            height: 380px;
+        }
+        .middle-section {
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+    }
+
+    @media (max-width: 550px) {
+        .anni-logo {
+            width: 220px;
+            height: 220px;
+        }
+        .tagline-img {
+            height: 300px;
+        }
+        /* Mathematical matrix downscaling to keep pixel-perfect CSS turntable intact on small screens */
+        .turntable {
+            transform: scale(0.68);
+            transform-origin: center top;
+            margin-bottom: -208px; /* Recovers collapsed margin height from scale metrics mapping */
+        }
+        .playlist-panel {
+            width: 340px;
+            max-width: 100%;
+            height: 420px;
+        }
+        /* Envelope scale logic isolated to nested envelope container helper block */
+        .envelope-container {
+            transform: scale(0.85);
+            margin-top: 100px;
+            margin-bottom: 40px;
+        }
+        .envelope-wrapper {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    }
 </style>
 </head>
 <body>
@@ -496,7 +567,7 @@
                         <input type="color" id="gradPicker1" value="#66a6ff">
                     </div>
                     <div class="cb-row">
-                        <label for="gradPicker2">Color 2</label>
+                        <label technicians for="gradPicker2">Color 2</label>
                         <input type="color" id="gradPicker2" value="#ff9a9e">
                     </div>
                     <div class="slider-row">
@@ -571,49 +642,51 @@
         </div>
     </div>
 
-    <div class="envelope-wrapper" id="envelope">
-        <div class="envelope-back"></div>
-        <div class="film-strips-container">
-            <div class="film-strip" style="--open-x: -80px; --open-y: -90px; --open-rot: -18deg; --start-y: 10px;">
-                <div class="film-frame"><img src="img1.jpg" alt="Photo 1"></div>
-                <div class="film-frame"><img src="img2.jpg" alt="Photo 2"></div>
-                <div class="film-frame"><img src="img3.jpg" alt="Photo 3"></div>
-                <div class="film-frame"><img src="img4.jpg" alt="Photo 4"></div>
+    <div class="envelope-container">
+        <div class="envelope-wrapper" id="envelope">
+            <div class="envelope-back"></div>
+            <div class="film-strips-container">
+                <div class="film-strip" style="--open-x: -80px; --open-y: -90px; --open-rot: -18deg; --start-y: 10px;">
+                    <div class="film-frame"><img src="img1.jpg" alt="Photo 1"></div>
+                    <div class="film-frame"><img src="img2.jpg" alt="Photo 2"></div>
+                    <div class="film-frame"><img src="img3.jpg" alt="Photo 3"></div>
+                    <div class="film-frame"><img src="img4.jpg" alt="Photo 4"></div>
+                </div>
+                <div class="film-strip" style="--open-x: -48px; --open-y: -110px; --open-rot: -11deg; --start-y: 5px;">
+                    <div class="film-frame"><img src="img5.jpg" alt="Photo 5"></div>
+                    <div class="film-frame"><img src="img6.jpg" alt="Photo 6"></div>
+                    <div class="film-frame"><img src="img7.jpg" alt="Photo 7"></div>
+                    <div class="film-frame"><img src="img8.jpg" alt="Photo 8"></div>
+                </div>
+                <div class="film-strip" style="--open-x: -16px; --open-y: -120px; --open-rot: -4deg; --start-y: 0px;">
+                    <div class="film-frame"><img src="img9.jpg" alt="Photo 9"></div>
+                    <div class="film-frame"><img src="img10.jpg" alt="Photo 10"></div>
+                    <div class="film-frame"><img src="img11.jpg" alt="Photo 11"></div>
+                    <div class="film-frame"><img src="img12.jpg" alt="Photo 12"></div>
+                </div>
+                <div class="film-strip" style="--open-x: 16px; --open-y: -120px; --open-rot: 4deg; --start-y: 0px;">
+                    <div class="film-frame"><img src="img13.jpg" alt="Photo 13"></div>
+                    <div class="film-frame"><img src="img14.jpg" alt="Photo 14"></div>
+                    <div class="film-frame"><img src="img15.jpg" alt="Photo 15"></div>
+                    <div class="film-frame"><img src="img16.jpg" alt="Photo 16"></div>
+                </div>
+                <div class="film-strip" style="--open-x: 48px; --open-y: -110px; --open-rot: 11deg; --start-y: 5px;">
+                    <div class="film-frame"><img src="img17.jpg" alt="Photo 17"></div>
+                    <div class="film-frame"><img src="img18.jpg" alt="Photo 18"></div>
+                    <div class="film-frame"><img src="img19.jpg" alt="Photo 19"></div>
+                    <div class="film-frame"><img src="img20.jpg" alt="Photo 20"></div>
+                </div>
+                <div class="film-strip" style="--open-x: 80px; --open-y: -90px; --open-rot: 18deg; --start-y: 10px;">
+                    <div class="film-frame"><img src="img21.jpg" alt="Photo 21"></div>
+                    <div class="film-frame"><img src="img22.jpg" alt="Photo 22"></div>
+                    <div class="film-frame"><img src="img23.jpg" alt="Photo 23"></div>
+                    <div class="film-frame"><img src="img24.jpg" alt="Photo 24"></div>
+                </div>
             </div>
-            <div class="film-strip" style="--open-x: -48px; --open-y: -110px; --open-rot: -11deg; --start-y: 5px;">
-                <div class="film-frame"><img src="img5.jpg" alt="Photo 5"></div>
-                <div class="film-frame"><img src="img6.jpg" alt="Photo 6"></div>
-                <div class="film-frame"><img src="img7.jpg" alt="Photo 7"></div>
-                <div class="film-frame"><img src="img8.jpg" alt="Photo 8"></div>
-            </div>
-            <div class="film-strip" style="--open-x: -16px; --open-y: -120px; --open-rot: -4deg; --start-y: 0px;">
-                <div class="film-frame"><img src="img9.jpg" alt="Photo 9"></div>
-                <div class="film-frame"><img src="img10.jpg" alt="Photo 10"></div>
-                <div class="film-frame"><img src="img11.jpg" alt="Photo 11"></div>
-                <div class="film-frame"><img src="img12.jpg" alt="Photo 12"></div>
-            </div>
-            <div class="film-strip" style="--open-x: 16px; --open-y: -120px; --open-rot: 4deg; --start-y: 0px;">
-                <div class="film-frame"><img src="img13.jpg" alt="Photo 13"></div>
-                <div class="film-frame"><img src="img14.jpg" alt="Photo 14"></div>
-                <div class="film-frame"><img src="img15.jpg" alt="Photo 15"></div>
-                <div class="film-frame"><img src="img16.jpg" alt="Photo 16"></div>
-            </div>
-            <div class="film-strip" style="--open-x: 48px; --open-y: -110px; --open-rot: 11deg; --start-y: 5px;">
-                <div class="film-frame"><img src="img17.jpg" alt="Photo 17"></div>
-                <div class="film-frame"><img src="img18.jpg" alt="Photo 18"></div>
-                <div class="film-frame"><img src="img19.jpg" alt="Photo 19"></div>
-                <div class="film-frame"><img src="img20.jpg" alt="Photo 20"></div>
-            </div>
-            <div class="film-strip" style="--open-x: 80px; --open-y: -90px; --open-rot: 18deg; --start-y: 10px;">
-                <div class="film-frame"><img src="img21.jpg" alt="Photo 21"></div>
-                <div class="film-frame"><img src="img22.jpg" alt="Photo 22"></div>
-                <div class="film-frame"><img src="img23.jpg" alt="Photo 23"></div>
-                <div class="film-frame"><img src="img24.jpg" alt="Photo 24"></div>
-            </div>
+            <div class="letter">Happy 1.5 years<br>Anniversaryʸʸʸʸʸʸʸʸʸʸʸʸ<br>🦅🦅🦅</div>
+            <div class="envelope-front-flaps"></div>
+            <div class="envelope-top-flap"></div>
         </div>
-        <div class="letter">Happy 1.5 years<br>Anniversaryʸʸʸʸʸʸʸʸʸʸʸʸ<br>🦅🦅🦅</div>
-        <div class="envelope-front-flaps"></div>
-        <div class="envelope-top-flap"></div>
     </div>
 
 </div>
