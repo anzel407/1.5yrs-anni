@@ -34,10 +34,23 @@
         justify-content: center;
         align-items: flex-start; /* Changed for scrollability */
         min-height: 100vh;
-        background: linear-gradient(135deg, #66a6ff 0%, #ff9a9e 100%);
-        background-attachment: fixed; /* Securely locks gradient coordinates to view screen frame */
         font-family: sans-serif;
+    }
+
+    /* =========================================
+       🛡️ HARDWARE-ACCELERATED BACKGROUND LAYER
+       ========================================= */
+    #bgLayer {
+        position: fixed;
+        top: -50px; /* Slight over-stretching masks dynamic toolbar resizes and elastic overscroll completely */
+        left: -50px;
+        width: calc(100vw + 100px);
+        height: calc(100vh + 100px);
+        background: linear-gradient(135deg, #66a6ff 0%, #ff9a9e 100%);
+        z-index: -1;
+        pointer-events: none; /* Allows clicks to pass through transparent layers safely */
         transition: background 0.2s ease;
+        transform: translateZ(0); /* Forces GPU compositing layer acceleration */
     }
 
     /* Restructured into a Vertical Flow Layout */
@@ -561,7 +574,6 @@
             max-width: 100%;
             height: 420px;
         }
-        /* Adjusted margins slightly for tighter spacing on mobile viewports */
         .envelope-container {
             margin-top: 100px;
             margin-bottom: 40px;
@@ -570,6 +582,8 @@
 </style>
 </head>
 <body>
+
+<div id="bgLayer"></div>
 
 <div class="theme-customizer">
     <button class="theme-trigger-btn" id="themeTrigger" title="Customize Background Theme">
@@ -734,10 +748,10 @@
 
 <script>
     // =========================================================
-    // ⚙️ GITHUB API CONFIGURATION 
+    // ⚙️ GITHUB API CONFIGURATION
     // =========================================================
-    const GITHUB_USERNAME = 'anzel407'; 
-    const GITHUB_REPO = '1.5yrs-anni';           
+    const GITHUB_USERNAME = 'anzel407';
+    const GITHUB_REPO = '1.5yrs-anni';          
     
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/`;
 
@@ -833,19 +847,19 @@
     }
 
     function togglePlayback() {
-        if(songs.length === 0) return; 
-        isPlaying = !isPlaying; 
+        if(songs.length === 0) return;
+        isPlaying = !isPlaying;
         if (isPlaying) {
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
             tonearm.classList.add('playing');
             
-            setTimeout(() => { 
+            setTimeout(() => {
                 if(isPlaying) {
-                    record.classList.add('playing'); 
+                    record.classList.add('playing');
                     audioEngine.play();
                 }
-            }, 500); 
+            }, 500);
         } else {
             pauseIcon.style.display = 'none';
             playIcon.style.display = 'block';
@@ -877,19 +891,19 @@
             loadAndPlayTrack(nextIndex);
         } else {
             let nextIndex = currentTrackIndex + 1;
-            if(nextIndex >= songs.length) nextIndex = 0; 
+            if(nextIndex >= songs.length) nextIndex = 0;
             loadAndPlayTrack(nextIndex);
         }
     });
 
     prevBtn.addEventListener('click', () => {
         let prevIndex = currentTrackIndex - 1;
-        if(prevIndex < 0) prevIndex = songs.length - 1; 
+        if(prevIndex < 0) prevIndex = songs.length - 1;
         loadAndPlayTrack(prevIndex);
     });
 
     audioEngine.addEventListener('ended', () => {
-        nextBtn.click(); 
+        nextBtn.click();
     });
 
     const musicNotes = document.getElementById('musicNotes');
@@ -927,12 +941,13 @@
     });
 
     // =========================================================
-    // 🎨 THEME INTERACTION & CUSTOMIZATION ENGINES
+    // 🎨 THEME INTERACTION & CUSTOMIZATION ENGINES (MODIFIED)
     // =========================================================
     const themeTrigger = document.getElementById('themeTrigger');
     const themeMenu = document.getElementById('themeMenu');
     const themeCircles = document.querySelectorAll('.theme-circle');
     const colorboardWorkspace = document.getElementById('colorboardWorkspace');
+    const bgLayer = document.getElementById('bgLayer'); // Target the background layer div
     
     const tabSolid = document.getElementById('tabSolid');
     const tabGradient = document.getElementById('tabGradient');
@@ -945,7 +960,7 @@
     const gradAngleSlider = document.getElementById('gradAngleSlider');
     const angleValue = document.getElementById('angleValue');
     
-    let activeCustomTab = 'solid'; 
+    let activeCustomTab = 'solid';
 
     themeTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -960,13 +975,12 @@
 
     function applyCustomColorboard() {
         if (activeCustomTab === 'solid') {
-            document.body.style.background = solidPicker.value;
+            bgLayer.style.background = solidPicker.value;
         } else {
             const angle = gradAngleSlider.value;
             angleValue.innerText = `${angle}°`;
-            document.body.style.background = `linear-gradient(${angle}deg, ${gradPicker1.value} 0%, ${gradPicker2.value} 100%)`;
+            bgLayer.style.background = `linear-gradient(${angle}deg, ${gradPicker1.value} 0%, ${gradPicker2.value} 100%)`;
         }
-        document.body.style.backgroundAttachment = 'fixed';
     }
 
     themeCircles.forEach(circle => {
@@ -982,13 +996,12 @@
             } else {
                 colorboardWorkspace.classList.remove('active');
                 if (selectedTheme === 'default') {
-                    document.body.style.background = 'linear-gradient(135deg, #66a6ff 0%, #ff9a9e 100%)';
+                    bgLayer.style.background = 'linear-gradient(135deg, #66a6ff 0%, #ff9a9e 100%)';
                 } else if (selectedTheme === 'white') {
-                    document.body.style.background = '#ffffff';
+                    bgLayer.style.background = '#ffffff';
                 } else if (selectedTheme === 'dark') {
-                    document.body.style.background = '#333333';
+                    bgLayer.style.background = '#333333';
                 }
-                document.body.style.backgroundAttachment = 'fixed';
             }
         });
     });
@@ -1020,7 +1033,7 @@
     // =========================================================
     // 📩 NEW ENVELOPE 3-STEP CLICK LOGIC
     // =========================================================
-    let envelopeState = 0; 
+    let envelopeState = 0;
     const envelope = document.getElementById('envelope');
     const strips = document.querySelectorAll('.film-strip');
     const filmImages = document.querySelectorAll('.film-frame img');
@@ -1034,21 +1047,21 @@
             if (clickedStrip) {
                 if (!clickedStrip.classList.contains('active')) {
                     if (activeStrip) activeStrip.classList.remove('active');
-                    clickedStrip.classList.add('active'); 
-                    return; 
+                    clickedStrip.classList.add('active');
+                    return;
                 } else {
-                    return; 
+                    return;
                 }
             }
 
             if (activeStrip) {
-                activeStrip.classList.remove('active'); 
-                return; 
+                activeStrip.classList.remove('active');
+                return;
             }
         }
 
         if (envelopeState === 2 && clickedStrip) {
-            return; 
+            return;
         }
 
         envelopeState = (envelopeState + 1) % 3;
@@ -1078,22 +1091,22 @@
             const strip = img.closest('.film-strip');
             
             if (envelopeState === 1 && !strip.classList.contains('active')) {
-                return; 
+                return;
             }
             
             if (envelopeState === 0) {
                 return;
             }
 
-            e.stopPropagation(); 
-            lightboxImg.src = img.src; 
-            lightbox.classList.add('active'); 
+            e.stopPropagation();
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
         });
     });
 
     lightbox.addEventListener('click', () => {
         lightbox.classList.remove('active');
-        setTimeout(() => lightboxImg.src = '', 300); 
+        setTimeout(() => lightboxImg.src = '', 300);
     });
 </script>
 
