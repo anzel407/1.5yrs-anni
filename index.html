@@ -2,23 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Anniversary Gift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <style>
     /* Reset and Layout */
-    body {
+    html, body {
         margin: 0;
         padding: 0;
+        width: 100%;
+        overflow-x: hidden; /* Strict lock to prevent horizontal document stretching */
+    }
+    
+    body {
         display: flex;
         justify-content: center;
         align-items: flex-start; /* Changed for scrollability */
         min-height: 100vh;
         background: linear-gradient(135deg, #66a6ff 0%, #ff9a9e 100%);
+        background-attachment: fixed; /* Bulletproof gradient anchoring across devices */
         font-family: sans-serif;
-        overflow-x: hidden;
         transition: background 0.2s ease;
     }
 
@@ -300,7 +305,7 @@
         border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         z-index: 3; display: flex; align-items: center; justify-content: center;
         text-align: center; 
-        font-family: 'Lora', 'Georgia', serif; /* MODIFIED: Set font to Lora */
+        font-family: 'Lora', 'Georgia', serif; /* Set font to Lora */
         font-size: 24px; font-weight: bold;
         line-height: 1.4;
         color: #b22222; transition: transform 0.5s ease-in-out; 
@@ -351,10 +356,17 @@
     /* =========================================
        TURNTABLE CSS 
        ========================================= */
+    .turntable-scaler {
+        width: 500px;
+        height: 650px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .turntable {
         width: 500px; height: 650px; background-color: #a4c639; border-radius: 25px;
         position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 0 0 10px rgba(0,0,0,0.05);
-        flex-shrink: 0;
     }
     .music-notes { position: absolute; top: 35px; left: 45px; color: rgba(255, 255, 255, 0.8); font-size: 32px; transform: rotate(-15deg); transition: opacity 0.1s ease; }
     .nfc-logo { position: absolute; bottom: 180px; right: 90px; background: #f4f5d7; padding: 8px 16px; border-radius: 12px 30px 12px 12px; color: #8da631; font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 5; }
@@ -476,7 +488,7 @@
     .lightbox img { max-width: 90%; max-height: 90vh; border: 8px solid white; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
     /* =========================================
-       📱 MOBILE RESPONSIVENESS & COMPATIBILITY
+       📱 SECURE MOBILE RESPONSIVENESS MATRIX
        ========================================= */
     @media (max-width: 900px) {
         .main-layout {
@@ -485,7 +497,7 @@
         }
         .top-section {
             flex-direction: column;
-            gap: 10px;
+            gap: 0;
             margin-bottom: 10px;
         }
         .anni-logo {
@@ -493,7 +505,10 @@
             height: 280px;
         }
         .tagline-img {
-            height: 380px;
+            height: auto;
+            width: 95%;
+            max-width: 440px;
+            margin-top: -50px; /* Reliable overlapping mechanism on vertical screens */
         }
         .middle-section {
             flex-direction: column;
@@ -508,26 +523,36 @@
             height: 220px;
         }
         .tagline-img {
-            height: 300px;
+            max-width: 340px;
+            margin-top: -40px;
         }
-        /* Mathematical matrix downscaling to keep pixel-perfect CSS turntable intact on small screens */
+        /* Lock physical layout bounding footprint down to scale criteria to terminate ghost scroll leakage */
+        .turntable-scaler {
+            width: 320px;
+            height: 416px;
+        }
         .turntable {
-            transform: scale(0.68);
-            transform-origin: center top;
-            margin-bottom: -208px; /* Recovers collapsed margin height from scale metrics mapping */
+            transform: scale(0.64);
+            transform-origin: center center;
         }
         .playlist-panel {
-            width: 340px;
+            width: 320px;
             max-width: 100%;
             height: 420px;
         }
-        /* Envelope scale logic isolated to nested envelope container helper block */
+        /* Contained bounding frame mapping for envelope downscale */
         .envelope-container {
-            transform: scale(0.85);
+            width: 280px;
+            height: 184px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-top: 100px;
             margin-bottom: 40px;
         }
         .envelope-wrapper {
+            transform: scale(0.80);
+            transform-origin: center center;
             margin-top: 0px;
             margin-bottom: 0px;
         }
@@ -567,7 +592,7 @@
                         <input type="color" id="gradPicker1" value="#66a6ff">
                     </div>
                     <div class="cb-row">
-                        <label technicians for="gradPicker2">Color 2</label>
+                        <label for="gradPicker2">Color 2</label>
                         <input type="color" id="gradPicker2" value="#ff9a9e">
                     </div>
                     <div class="slider-row">
@@ -590,44 +615,46 @@
     </div>
 
     <div class="middle-section">
-        <div class="turntable">
-            <div class="music-notes" id="musicNotes">♪ ♫</div>
-            <div class="record-base">
-                <div class="record-container" id="record">
-                    <div class="record-sheen"></div>
-                    <div class="record-label"></div>
+        <div class="turntable-scaler">
+            <div class="turntable">
+                <div class="music-notes" id="musicNotes">♪ ♫</div>
+                <div class="record-base">
+                    <div class="record-container" id="record">
+                        <div class="record-sheen"></div>
+                        <div class="record-label"></div>
+                    </div>
+                    <div class="spindle"></div>
                 </div>
-                <div class="spindle"></div>
-            </div>
-            <div class="tonearm-pivot"></div>
-            <div class="tonearm-stick" id="tonearm"><div class="stylus-head"></div></div>
-            <div class="nfc-logo">NFC <span style="font-size: 14px;">🎵</span></div>
+                <div class="tonearm-pivot"></div>
+                <div class="tonearm-stick" id="tonearm"><div class="stylus-head"></div></div>
+                <div class="nfc-logo">NFC <span style="font-size: 14px;">🎵</span></div>
 
-            <div class="control-panel">
-                <div class="knobs-container">
-                    <div class="knob"></div><div class="knob"></div><div class="knob"></div>
-                </div>
-                
-                <div class="center-controls">
-                    <div class="playback-controls">
-                        <button class="btn" id="shuffleBtn"><svg viewBox="0 0 24 24" width="40" height="40" fill="white"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
-                        <button class="btn" id="prevBtn"><svg viewBox="0 0 24 24" width="55" height="55" fill="white"><path d="M11 6l-8.5 6 8.5 6V6zm9 0l-8.5 6 8.5 6V6z"/></svg></button>
-                        <button class="btn" id="playBtn">
-                            <svg id="playIcon" viewBox="0 0 24 24" width="70" height="70" fill="white" style="display: block;"><path d="M8 5v14l11-7z"/></svg>
-                            <svg id="pauseIcon" viewBox="0 0 24 24" width="70" height="70" fill="white" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                        </button>
-                        <button class="btn" id="nextBtn"><svg viewBox="0 0 24 24" width="55" height="55" fill="white"><path d="M4 18l8.5-6L4 6v12zm9 0l8.5-6-8.5-6v12z"/></svg></button>
+                <div class="control-panel">
+                    <div class="knobs-container">
+                        <div class="knob"></div><div class="knob"></div><div class="knob"></div>
                     </div>
                     
-                    <div class="progress-container">
-                        <span id="timeDisplay" class="time-display">0:00/0:00</span>
-                        <input type="range" class="progress-slider" id="progressBar" min="0" max="100" value="0">
+                    <div class="center-controls">
+                        <div class="playback-controls">
+                            <button class="btn" id="shuffleBtn"><svg viewBox="0 0 24 24" width="40" height="40" fill="white"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
+                            <button class="btn" id="prevBtn"><svg viewBox="0 0 24 24" width="55" height="55" fill="white"><path d="M11 6l-8.5 6 8.5 6V6zm9 0l-8.5 6 8.5 6V6z"/></svg></button>
+                            <button class="btn" id="playBtn">
+                                <svg id="playIcon" viewBox="0 0 24 24" width="70" height="70" fill="white" style="display: block;"><path d="M8 5v14l11-7z"/></svg>
+                                <svg id="pauseIcon" viewBox="0 0 24 24" width="70" height="70" fill="white" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            </button>
+                            <button class="btn" id="nextBtn"><svg viewBox="0 0 24 24" width="55" height="55" fill="white"><path d="M4 18l8.5-6L4 6v12zm9 0l8.5-6-8.5-6v12z"/></svg></button>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <span id="timeDisplay" class="time-display">0:00/0:00</span>
+                            <input type="range" class="progress-slider" id="progressBar" min="0" max="100" value="0">
+                        </div>
                     </div>
-                </div>
 
-                <div class="slider-container">
-                    <div class="slider-marks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80">
+                    <div class="slider-container">
+                        <div class="slider-marks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80">
+                    </div>
                 </div>
             </div>
         </div>
@@ -931,6 +958,7 @@
             angleValue.innerText = `${angle}°`;
             document.body.style.background = `linear-gradient(${angle}deg, ${gradPicker1.value} 0%, ${gradPicker2.value} 100%)`;
         }
+        document.body.style.backgroundAttachment = 'fixed';
     }
 
     // Handles picking different theme modes
@@ -953,6 +981,7 @@
                 } else if (selectedTheme === 'dark') {
                     document.body.style.background = '#333333';
                 }
+                document.body.style.backgroundAttachment = 'fixed';
             }
         });
     });
