@@ -8,12 +8,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <style>
+    /* Responsive Viewport Matrix Configurations */
+    :root {
+        --player-scale: 1;
+        --envelope-scale: 1;
+    }
+
+    @media (max-width: 550px) {
+        :root {
+            --player-scale: 0.66;
+            --envelope-scale: 0.85;
+        }
+    }
+
     /* Reset and Layout */
     html, body {
         margin: 0;
         padding: 0;
         width: 100%;
-        overflow-x: hidden; /* Strict lock to prevent horizontal document stretching */
+        overflow-x: hidden; /* Strict physical restriction to terminate horizontal panning bugs */
     }
     
     body {
@@ -22,7 +35,7 @@
         align-items: flex-start; /* Changed for scrollability */
         min-height: 100vh;
         background: linear-gradient(135deg, #66a6ff 0%, #ff9a9e 100%);
-        background-attachment: fixed; /* Bulletproof gradient anchoring across devices */
+        background-attachment: fixed; /* Securely locks gradient coordinates to view screen frame */
         font-family: sans-serif;
         transition: background 0.2s ease;
     }
@@ -239,16 +252,30 @@
         align-items: flex-end; /* Bottom aligns the turntable and the playlist */
         justify-content: center;
         gap: 60px;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     /* =========================================
        3. ENVELOPE SECTION (Bottom)
        ========================================= */
     .envelope-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
+        /* Bounding frame matches scaled sizing exactly, eliminating panning glitch */
+        width: calc(350px * var(--envelope-scale));
+        height: calc(230px * var(--envelope-scale));
+        position: relative;
+        margin-top: 180px; /* Big buffer so exploding strips don't overlap the turntable */
+        margin-bottom: 80px; 
+    }
+
+    .envelope-scaler {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 350px;
+        height: 230px;
+        transform: scale(var(--envelope-scale));
+        transform-origin: top left;
     }
 
     .envelope-wrapper {
@@ -258,8 +285,6 @@
         cursor: pointer;
         perspective: 1000px;
         animation: jiggle 5s infinite ease-in-out;
-        margin-top: 180px; /* Big buffer so exploding strips don't overlap the turntable */
-        margin-bottom: 80px; 
     }
 
     .envelope-back {
@@ -357,16 +382,21 @@
        TURNTABLE CSS 
        ========================================= */
     .turntable-scaler {
-        width: 500px;
-        height: 650px;
+        /* Bounding frame matches scaled sizing exactly, eliminating panning glitch */
+        width: calc(500px * var(--player-scale));
+        height: calc(650px * var(--player-scale));
         flex-shrink: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        position: relative;
     }
+
     .turntable {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 500px; height: 650px; background-color: #a4c639; border-radius: 25px;
-        position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 0 0 10px rgba(0,0,0,0.05);
+        overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 0 0 10px rgba(0,0,0,0.05);
+        transform: scale(var(--player-scale));
+        transform-origin: top left;
     }
     .music-notes { position: absolute; top: 35px; left: 45px; color: rgba(255, 255, 255, 0.8); font-size: 32px; transform: rotate(-15deg); transition: opacity 0.1s ease; }
     .nfc-logo { position: absolute; bottom: 180px; right: 90px; background: #f4f5d7; padding: 8px 16px; border-radius: 12px 30px 12px 12px; color: #8da631; font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 5; }
@@ -488,7 +518,7 @@
     .lightbox img { max-width: 90%; max-height: 90vh; border: 8px solid white; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
     /* =========================================
-       📱 SECURE MOBILE RESPONSIVENESS MATRIX
+       📱 MOBILE VIEW ADAPTATION LAYOUTS
        ========================================= */
     @media (max-width: 900px) {
         .main-layout {
@@ -508,7 +538,7 @@
             height: auto;
             width: 95%;
             max-width: 440px;
-            margin-top: -50px; /* Reliable overlapping mechanism on vertical screens */
+            margin-top: -50px; /* Seamless overlay engine mechanism on phone formats */
         }
         .middle-section {
             flex-direction: column;
@@ -526,35 +556,15 @@
             max-width: 340px;
             margin-top: -40px;
         }
-        /* Lock physical layout bounding footprint down to scale criteria to terminate ghost scroll leakage */
-        .turntable-scaler {
-            width: 320px;
-            height: 416px;
-        }
-        .turntable {
-            transform: scale(0.64);
-            transform-origin: center center;
-        }
         .playlist-panel {
             width: 320px;
             max-width: 100%;
             height: 420px;
         }
-        /* Contained bounding frame mapping for envelope downscale */
+        /* Adjusted margins slightly for tighter spacing on mobile viewports */
         .envelope-container {
-            width: 280px;
-            height: 184px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             margin-top: 100px;
             margin-bottom: 40px;
-        }
-        .envelope-wrapper {
-            transform: scale(0.80);
-            transform-origin: center center;
-            margin-top: 0px;
-            margin-bottom: 0px;
         }
     }
 </style>
@@ -670,49 +680,51 @@
     </div>
 
     <div class="envelope-container">
-        <div class="envelope-wrapper" id="envelope">
-            <div class="envelope-back"></div>
-            <div class="film-strips-container">
-                <div class="film-strip" style="--open-x: -80px; --open-y: -90px; --open-rot: -18deg; --start-y: 10px;">
-                    <div class="film-frame"><img src="img1.jpg" alt="Photo 1"></div>
-                    <div class="film-frame"><img src="img2.jpg" alt="Photo 2"></div>
-                    <div class="film-frame"><img src="img3.jpg" alt="Photo 3"></div>
-                    <div class="film-frame"><img src="img4.jpg" alt="Photo 4"></div>
+        <div class="envelope-scaler">
+            <div class="envelope-wrapper" id="envelope">
+                <div class="envelope-back"></div>
+                <div class="film-strips-container">
+                    <div class="film-strip" style="--open-x: -80px; --open-y: -90px; --open-rot: -18deg; --start-y: 10px;">
+                        <div class="film-frame"><img src="img1.jpg" alt="Photo 1"></div>
+                        <div class="film-frame"><img src="img2.jpg" alt="Photo 2"></div>
+                        <div class="film-frame"><img src="img3.jpg" alt="Photo 3"></div>
+                        <div class="film-frame"><img src="img4.jpg" alt="Photo 4"></div>
+                    </div>
+                    <div class="film-strip" style="--open-x: -48px; --open-y: -110px; --open-rot: -11deg; --start-y: 5px;">
+                        <div class="film-frame"><img src="img5.jpg" alt="Photo 5"></div>
+                        <div class="film-frame"><img src="img6.jpg" alt="Photo 6"></div>
+                        <div class="film-frame"><img src="img7.jpg" alt="Photo 7"></div>
+                        <div class="film-frame"><img src="img8.jpg" alt="Photo 8"></div>
+                    </div>
+                    <div class="film-strip" style="--open-x: -16px; --open-y: -120px; --open-rot: -4deg; --start-y: 0px;">
+                        <div class="film-frame"><img src="img9.jpg" alt="Photo 9"></div>
+                        <div class="film-frame"><img src="img10.jpg" alt="Photo 10"></div>
+                        <div class="film-frame"><img src="img11.jpg" alt="Photo 11"></div>
+                        <div class="film-frame"><img src="img12.jpg" alt="Photo 12"></div>
+                    </div>
+                    <div class="film-strip" style="--open-x: 16px; --open-y: -120px; --open-rot: 4deg; --start-y: 0px;">
+                        <div class="film-frame"><img src="img13.jpg" alt="Photo 13"></div>
+                        <div class="film-frame"><img src="img14.jpg" alt="Photo 14"></div>
+                        <div class="film-frame"><img src="img15.jpg" alt="Photo 15"></div>
+                        <div class="film-frame"><img src="img16.jpg" alt="Photo 16"></div>
+                    </div>
+                    <div class="film-strip" style="--open-x: 48px; --open-y: -110px; --open-rot: 11deg; --start-y: 5px;">
+                        <div class="film-frame"><img src="img17.jpg" alt="Photo 17"></div>
+                        <div class="film-frame"><img src="img18.jpg" alt="Photo 18"></div>
+                        <div class="film-frame"><img src="img19.jpg" alt="Photo 19"></div>
+                        <div class="film-frame"><img src="img20.jpg" alt="Photo 20"></div>
+                    </div>
+                    <div class="film-strip" style="--open-x: 80px; --open-y: -90px; --open-rot: 18deg; --start-y: 10px;">
+                        <div class="film-frame"><img src="img21.jpg" alt="Photo 21"></div>
+                        <div class="film-frame"><img src="img22.jpg" alt="Photo 22"></div>
+                        <div class="film-frame"><img src="img23.jpg" alt="Photo 23"></div>
+                        <div class="film-frame"><img src="img24.jpg" alt="Photo 24"></div>
+                    </div>
                 </div>
-                <div class="film-strip" style="--open-x: -48px; --open-y: -110px; --open-rot: -11deg; --start-y: 5px;">
-                    <div class="film-frame"><img src="img5.jpg" alt="Photo 5"></div>
-                    <div class="film-frame"><img src="img6.jpg" alt="Photo 6"></div>
-                    <div class="film-frame"><img src="img7.jpg" alt="Photo 7"></div>
-                    <div class="film-frame"><img src="img8.jpg" alt="Photo 8"></div>
-                </div>
-                <div class="film-strip" style="--open-x: -16px; --open-y: -120px; --open-rot: -4deg; --start-y: 0px;">
-                    <div class="film-frame"><img src="img9.jpg" alt="Photo 9"></div>
-                    <div class="film-frame"><img src="img10.jpg" alt="Photo 10"></div>
-                    <div class="film-frame"><img src="img11.jpg" alt="Photo 11"></div>
-                    <div class="film-frame"><img src="img12.jpg" alt="Photo 12"></div>
-                </div>
-                <div class="film-strip" style="--open-x: 16px; --open-y: -120px; --open-rot: 4deg; --start-y: 0px;">
-                    <div class="film-frame"><img src="img13.jpg" alt="Photo 13"></div>
-                    <div class="film-frame"><img src="img14.jpg" alt="Photo 14"></div>
-                    <div class="film-frame"><img src="img15.jpg" alt="Photo 15"></div>
-                    <div class="film-frame"><img src="img16.jpg" alt="Photo 16"></div>
-                </div>
-                <div class="film-strip" style="--open-x: 48px; --open-y: -110px; --open-rot: 11deg; --start-y: 5px;">
-                    <div class="film-frame"><img src="img17.jpg" alt="Photo 17"></div>
-                    <div class="film-frame"><img src="img18.jpg" alt="Photo 18"></div>
-                    <div class="film-frame"><img src="img19.jpg" alt="Photo 19"></div>
-                    <div class="film-frame"><img src="img20.jpg" alt="Photo 20"></div>
-                </div>
-                <div class="film-strip" style="--open-x: 80px; --open-y: -90px; --open-rot: 18deg; --start-y: 10px;">
-                    <div class="film-frame"><img src="img21.jpg" alt="Photo 21"></div>
-                    <div class="film-frame"><img src="img22.jpg" alt="Photo 22"></div>
-                    <div class="film-frame"><img src="img23.jpg" alt="Photo 23"></div>
-                    <div class="film-frame"><img src="img24.jpg" alt="Photo 24"></div>
-                </div>
+                <div class="letter">Happy 1.5 years<br>Anniversaryʸʸʸʸʸʸʸʸʸʸʸʸ<br>🦅🦅🦅</div>
+                <div class="envelope-front-flaps"></div>
+                <div class="envelope-top-flap"></div>
             </div>
-            <div class="letter">Happy 1.5 years<br>Anniversaryʸʸʸʸʸʸʸʸʸʸʸʸ<br>🦅🦅🦅</div>
-            <div class="envelope-front-flaps"></div>
-            <div class="envelope-top-flap"></div>
         </div>
     </div>
 
@@ -843,7 +855,6 @@
         }
     }
 
-    // Shuffle Button Toggle Logic
     shuffleBtn.addEventListener('click', () => {
         isShuffle = !isShuffle;
         if(isShuffle) {
@@ -936,20 +947,17 @@
     
     let activeCustomTab = 'solid'; 
 
-    // Open/Close Dropdown Panel
     themeTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
         themeMenu.classList.toggle('active');
     });
 
-    // Close configuration panel when clicking outside area
     document.addEventListener('click', (e) => {
         if (!themeMenu.contains(e.target) && e.target !== themeTrigger) {
             themeMenu.classList.remove('active');
         }
     });
 
-    // Dynamic execution of custom canvas settings
     function applyCustomColorboard() {
         if (activeCustomTab === 'solid') {
             document.body.style.background = solidPicker.value;
@@ -961,7 +969,6 @@
         document.body.style.backgroundAttachment = 'fixed';
     }
 
-    // Handles picking different theme modes
     themeCircles.forEach(circle => {
         circle.addEventListener('click', () => {
             themeCircles.forEach(c => c.classList.remove('active'));
@@ -986,7 +993,6 @@
         });
     });
 
-    // Canva Tab toggling triggers
     tabSolid.addEventListener('click', () => {
         tabGradient.classList.remove('active');
         tabSolid.classList.add('active');
@@ -1005,7 +1011,6 @@
         applyCustomColorboard();
     });
 
-    // Real-time canvas value dynamic updating listeners
     solidPicker.addEventListener('input', applyCustomColorboard);
     gradPicker1.addEventListener('input', applyCustomColorboard);
     gradPicker2.addEventListener('input', applyCustomColorboard);
@@ -1015,7 +1020,7 @@
     // =========================================================
     // 📩 NEW ENVELOPE 3-STEP CLICK LOGIC
     // =========================================================
-    let envelopeState = 0; // 0: Closed, 1: Open, 2: All Strips Out
+    let envelopeState = 0; 
     const envelope = document.getElementById('envelope');
     const strips = document.querySelectorAll('.film-strip');
     const filmImages = document.querySelectorAll('.film-frame img');
@@ -1023,48 +1028,40 @@
     envelope.addEventListener('click', (e) => {
         const clickedStrip = e.target.closest('.film-strip');
 
-        // State 1 Behavior (Envelope open, strips waiting)
         if (envelopeState === 1) {
             const activeStrip = document.querySelector('.film-strip.active');
 
-            // 1a. We clicked a strip
             if (clickedStrip) {
                 if (!clickedStrip.classList.contains('active')) {
                     if (activeStrip) activeStrip.classList.remove('active');
-                    clickedStrip.classList.add('active'); // Pull this specific strip out
-                    return; // End execution here
+                    clickedStrip.classList.add('active'); 
+                    return; 
                 } else {
-                    return; // Ignore clicking the black padding of an already active strip
+                    return; 
                 }
             }
 
-            // 1b. We clicked outside the active strip (envelope background or letter)
             if (activeStrip) {
-                activeStrip.classList.remove('active'); // Tuck it back in
-                return; // End execution here, stay in State 1
+                activeStrip.classList.remove('active'); 
+                return; 
             }
         }
 
-        // State 2 Behavior 
         if (envelopeState === 2 && clickedStrip) {
-            return; // Ignore clicking the strips directly when they are all out
+            return; 
         }
 
-        // Cycle the Envelope State (0 -> 1 -> 2 -> 0)
         envelopeState = (envelopeState + 1) % 3;
 
         if (envelopeState === 0) {
-            // Close Envelope
             envelope.classList.remove('is-open', 'state-2');
             strips.forEach(s => s.classList.remove('active'));
         } 
         else if (envelopeState === 1) {
-            // Open Envelope (Strips stay fanned behind letter)
             envelope.classList.add('is-open');
             envelope.classList.remove('state-2');
         } 
         else if (envelopeState === 2) {
-            // Pull All Strips Out
             envelope.classList.add('is-open', 'state-2');
             strips.forEach(s => s.classList.remove('active'));
         }
@@ -1080,9 +1077,7 @@
         img.addEventListener('click', (e) => {
             const strip = img.closest('.film-strip');
             
-            // If the strip hasn't slid out yet, determine behavior
             if (envelopeState === 1 && !strip.classList.contains('active')) {
-                // Let the click bubble up to the envelope listener so it slides out the strip
                 return; 
             }
             
@@ -1090,7 +1085,6 @@
                 return;
             }
 
-            // Stop click from closing the envelope or resetting state
             e.stopPropagation(); 
             lightboxImg.src = img.src; 
             lightbox.classList.add('active'); 
