@@ -27,7 +27,7 @@
         gap: 60px; 
         width: 100%;
         max-width: 1400px;
-        padding: 40px;
+        padding: 120px 40px 40px 40px; /* Increased top padding to accommodate the new large title */
     }
 
     /* =========================================
@@ -56,7 +56,7 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         transition: transform 0.2s ease, background-color 0.2s;
     }
-    .theme-trigger-btn hover {
+    .theme-trigger-btn:hover {
         transform: scale(1.05);
         background-color: #f9f9f9;
     }
@@ -203,6 +203,7 @@
        MIDDLE COLUMN CONTAINER (Logo + Playlist)
        ========================================= */
     .middle-container {
+        position: relative; /* Added relative positioning to anchor the absolute title */
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -211,30 +212,28 @@
         flex-shrink: 0;
     }
 
-    /* Container for Logo and Tagline side-by-side */
+    /* Container for Logo and Tagline side-by-side as a Header */
     .logo-row {
         display: flex;
         align-items: center;
-        gap: 15px;
-        margin-bottom: 20px;
-        width: 100%;
+        gap: 20px;
+        position: absolute;
+        top: -110px; /* Elevated position above the playlist module */
+        left: 0;
+        width: max-content;
     }
 
-    /* Logo image styling - Scaled up and moved to the left */
+    /* Logo image styling - Substantially scaled up */
     .anni-logo {
-        width: 190px;
-        height: 190px;
+        width: 240px; 
+        height: 240px;
         object-fit: contain;
-        position: relative;
-        left: -20px;
     }
 
-    /* Tagline image styling - Scaled up and moved even more to the left */
+    /* Tagline image styling - Substantially scaled up to complement the logo bounds */
     .tagline-img {
-        height: 230px;
+        height: 235px; 
         object-fit: contain;
-        position: relative;
-        left: -45px;
     }
 
     /* =========================================
@@ -287,13 +286,14 @@
     .film-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
     .film-frame img:hover { transform: scale(1.15); }
 
-    /* Updated font-family to 'Lora' for the anniversary card */
     .letter {
         position: absolute; bottom: 5px; left: 15px; right: 15px; height: 210px; 
         background-color: #fff9c4; 
         border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         z-index: 3; display: flex; align-items: center; justify-content: center;
-        text-align: center; font-family: 'Lora', Georgia, serif; font-size: 24px; font-weight: bold;
+        text-align: center; 
+        font-family: 'Lora', serif; /* Font updated to Lora */
+        font-size: 24px; font-weight: bold;
         line-height: 1.4;
         color: #b22222; transition: transform 0.5s ease-in-out; 
         box-sizing: border-box; padding-bottom: 10px;
@@ -628,8 +628,6 @@
 </div>
 
 <div class="lightbox" id="lightbox"><img src="" id="lightboxImg" alt="Enlarged Photo"></div>
-
-<audio id="audioEngine"></audio>
 
 <script>
     // =========================================================
