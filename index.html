@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anniversary Gift</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
 <style>
     /* Reset and Layout */
     body {
@@ -27,7 +29,7 @@
         gap: 60px; 
         width: 100%;
         max-width: 1400px;
-        padding: 120px 40px 40px 40px; /* Increased top padding to accommodate the new large title */
+        padding: 40px;
     }
 
     /* =========================================
@@ -203,36 +205,33 @@
        MIDDLE COLUMN CONTAINER (Logo + Playlist)
        ========================================= */
     .middle-container {
-        position: relative; /* Added relative positioning to anchor the absolute title */
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        justify-content: flex-end;
+        justify-content: flex-end; /* Packs playlist to the bottom, pushing oversized logos upward */
         height: 650px; /* Matches turntable height perfectly */
         flex-shrink: 0;
     }
 
-    /* Container for Logo and Tagline side-by-side as a Header */
+    /* Container for Logo and Tagline side-by-side */
     .logo-row {
         display: flex;
         align-items: center;
         gap: 20px;
-        position: absolute;
-        top: -110px; /* Elevated position above the playlist module */
-        left: 0;
-        width: max-content;
+        margin-bottom: 40px; /* Extends title further upwards away from playlist */
+        flex-shrink: 0; /* Prevents images from squishing to fit container */
+        margin-left: -15px; /* Optical alignment shift to line image text up with playlist edge */
     }
 
-    /* Logo image styling - Substantially scaled up */
+    /* Considerably Bigger Image Styling */
     .anni-logo {
-        width: 240px; 
-        height: 240px;
+        width: 220px; 
+        height: 220px;
         object-fit: contain;
     }
 
-    /* Tagline image styling - Substantially scaled up to complement the logo bounds */
     .tagline-img {
-        height: 235px; 
+        height: 280px; 
         object-fit: contain;
     }
 
@@ -292,7 +291,7 @@
         border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         z-index: 3; display: flex; align-items: center; justify-content: center;
         text-align: center; 
-        font-family: 'Lora', serif; /* Font updated to Lora */
+        font-family: 'Lora', serif; /* New Elegant Font */
         font-size: 24px; font-weight: bold;
         line-height: 1.4;
         color: #b22222; transition: transform 0.5s ease-in-out; 
@@ -519,6 +518,8 @@
         </div>
     </div>
 </div>
+
+<audio id="audioEngine"></audio>
 
 <div class="main-layout">
     
